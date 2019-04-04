@@ -6,10 +6,9 @@ import {
   View,
   KeyboardAvoidingView,
 } from 'react-native';
-//import { SimpleLineIcons } from '@expo/vector-icons';
+import { Navigation } from 'react-native-navigation'
 import Icon from 'react-native-vector-icons/Ionicons';
 import TouchableItem from './TouchableItem';
-import { RNCamera } from 'react-native-camera';
 
 const cameraIcon = Platform.OS === 'ios'
   ? "ios-camera"
@@ -17,8 +16,25 @@ const cameraIcon = Platform.OS === 'ios'
 
 export default class JournalItemInput extends Component {
 
-  _launchCamera = async () => {
+  _launchCamera = () => {
     //const result = await
+    console.log(this.props.componentId);
+    Navigation.showModal({
+      stack: {
+        children: [{
+          component: {
+            name: 'ViewCamera',
+          }
+        }]
+      }
+    })
+
+//    Navigation.push(this.props.componentId, {
+//          component: {
+//            name: 'ViewCamera',
+//          }
+//        });
+
   };
 
   _submit(text) {
@@ -27,25 +43,13 @@ export default class JournalItemInput extends Component {
   }
 
   render() {
+    console.log('props; ', this.props)
 
     return (
         <KeyboardAvoidingView behavior="padding">
           <View style={styles.inputContainer}>
-            <RNCamera
-                ref={ref => {
-                  this.camera = ref;
-                }}
-                style={styles.preview}
-                type={RNCamera.Constants.Type.back}
-                flashMode={RNCamera.Constants.FlashMode.on}
-                permissionDialogTitle={'Permission to use camera'}
-                permissionDialogMessage={'We need your permission to use your camera phone'}
-                onGoogleVisionBarcodesDetected={({ barcodes }) => {
-                  console.log(barcodes);
-                }}
-            />
             <View style={styles.photoIcon}>
-              <TouchableItem onPress={() => this._launchCamera()}>
+              <TouchableItem onPress={this._launchCamera}>
                 <Icon name={cameraIcon} size={24} color="deepskyblue" />
               </TouchableItem>
             </View>
