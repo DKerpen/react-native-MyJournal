@@ -24,7 +24,7 @@ const journalItems = [];
 export default class ViewTagebuch extends React.Component<Props> {
   state = { items : journalItems};
 
-  _addItem(text) {
+  _addItem(text, photo) {
 
     let { items } = this.state;
     let [head, ...tail] = items;
@@ -34,14 +34,15 @@ export default class ViewTagebuch extends React.Component<Props> {
     const month = now.getMonth() + 1;
     const year = now.getFullYear();
     const today = `${day}.${month}.${year}`;
-    console.log(`Neuer Eintrag: ${today} ${items.length}`);
 
     if (head === undefined  || head.title != today) {
       head = { data: [], title: today };
       tail = items;
     }
 
-    const newItem = { text: text, date: now.getTime() };
+    const newItem = { text: text, photo: photo, date: now.getTime() };
+
+    console.log(`Neuer Eintrag: ${today} ${items.length} Foto:${items.photo}`);
     head.data = [newItem, ...head.data];
 
     items = [head, ...tail];
@@ -54,7 +55,7 @@ export default class ViewTagebuch extends React.Component<Props> {
     return (
       <View style={styles.container}>
         <JournalItems items={this.state.items} />
-        <JournalItemInput onMeinSubmit={text => this._addItem(text)} />
+        <JournalItemInput onMeinSubmit={(text, photo) => this._addItem(text, photo)} />
       </View>
     );
   }

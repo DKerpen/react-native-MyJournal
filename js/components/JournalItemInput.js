@@ -5,6 +5,7 @@ import {
   TextInput,
   View,
   KeyboardAvoidingView,
+  Image
 } from 'react-native';
 import { Navigation } from 'react-native-navigation'
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -16,6 +17,14 @@ const cameraIcon = Platform.OS === 'ios'
 
 export default class JournalItemInput extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      picUrl : null
+    };
+
+  }
+
   _launchCamera = () => {
     //const result = await
     console.log(this.props.componentId);
@@ -24,33 +33,42 @@ export default class JournalItemInput extends Component {
         children: [{
           component: {
             name: 'ViewCamera',
+            passProps: {
+              callback_new_pic: this._callback_new_pic
+            },
           }
         }]
       }
     })
-
-//    Navigation.push(this.props.componentId, {
-//          component: {
-//            name: 'ViewCamera',
-//          }
-//        });
-
   };
 
   _submit(text) {
       this.meintextInput.clear();
-      this.props.onMeinSubmit(text);
+      this.props.onMeinSubmit(text, this.state.picUrl);
+      this.setState({picUrl: null });
+  }
+
+  _callback_new_pic = (picUrl) => {
+    console.log(`Picture URL = ${picUrl}`);
+    this.setState({picUrl});
+    this.meintextInput.focus();
   }
 
   render() {
-    console.log('props; ', this.props)
+
+    const photoIcon = this.state.picUrl 
+      ? <Image
+          style={styles.imagePreview}
+          source={{ uri : this.state.picUrl }}
+        />
+      : <Icon name={cameraIcon} size={24} color="deepskyblue" />;
 
     return (
         <KeyboardAvoidingView behavior="padding">
           <View style={styles.inputContainer}>
             <View style={styles.photoIcon}>
               <TouchableItem onPress={this._launchCamera}>
-                <Icon name={cameraIcon} size={24} color="deepskyblue" />
+                {photoIcon}
               </TouchableItem>
             </View>
             <TextInput
@@ -91,4 +109,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
+  imagePreview: {
+    width:24,
+    height:24
+  }
 });

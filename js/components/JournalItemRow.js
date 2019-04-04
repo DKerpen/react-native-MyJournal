@@ -11,15 +11,21 @@ import TouchableItem from './TouchableItem';
 
   export default class JournalItems extends Component {
     render() {
+
       const { item } = this.props;
       const date = new Date(item.date);
       const minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
       const time = `${date.getHours()}:${minutes}`;
+      const photo = item.photo ? (
+        <Image style={styles.image} source={{ uri: item.photo }} />
+      ) : ( 
+        <Image style={styles.image} source={require('../../bilder/foto.png')} />
+      );
 
       return (
         <TouchableItem>
           <View style={styles.container}>
-            <Image style={styles.image} source={require('../../bilder/foto.png')} />
+            {photo}
             <View style={styles.itemText}>
               <Text numberOfLines={3} style={styles.listItem}>{item.text}</Text>
               <Text style={styles.time}>{time}</Text>
