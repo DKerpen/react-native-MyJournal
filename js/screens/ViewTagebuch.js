@@ -18,43 +18,66 @@ import {
 
 import JournalItems from '../components/JournalItems';
 import JournalItemInput from '../components/JournalItemInput';
+import Store from '../Store';
 
-const journalItems = [];
 
-export default class ViewTagebuch extends React.Component<Props> {
-  state = { items : journalItems};
+export default class ViewTagebuch extends Component {
+  state = { items : [] };
+
+  componentWillMount() {
+    this._refreshItems();
+  }
+
+  _refreshItems = async () => {
+    const items = await Store.loadItems();
+    this.setState({ items });
+  };
+
+  _getSectionTitleFromDate(date)  {
+    const dateObj = new Date(date);
+    const day = dateObj.getDate();
+    const month = dateObj.getMonth() + 1;
+    const year = dateObj.getFullYear();
+    return `${day}.${month}.${year}`;
+  }
+
+  _getItemsWithSections(items) {
+    if (items.length === 0) return [];
+
+    let sectionTitle = this._getSectionTitleFromDate(items[0].date);
+    let sections = [{ data: [], title: sectionTitle }];
+    items.forEach(item => {
+      sectionTitle = this._getSectionTitleFromDate(item.date);
+      let lastSection = sections[sections.length - 1];
+
+      if (lastSection.title == sectionTitle) {
+        lastSection.data.push(item);
+      } else {
+        sections.push({ data: [item], title: sectionTitle });
+      }
+    });
+    return sections;
+  }
 
   _addItem(text, photo) {
 
     let { items } = this.state;
-    let [head, ...tail] = items;
 
-    const now = new Date();
-    const day = now.getDate();
-    const month = now.getMonth() + 1;
-    const year = now.getFullYear();
-    const today = `${day}.${month}.${year}`;
+    const newItem = { text: text, photo: photo, date: Date.now() };
 
-    if (head === undefined  || head.title != today) {
-      head = { data: [], title: today };
-      tail = items;
-    }
-
-    const newItem = { text: text, photo: photo, date: now.getTime() };
-
-    console.log(`Neuer Eintrag: ${today} ${items.length} Foto:${items.photo}`);
-    head.data = [newItem, ...head.data];
-
-    items = [head, ...tail];
-    this.setState({ items });
-
+  //  if (items.length > 0) {
+  //    console.log(`Neuer Eintrag: ${this._getSectionTitleFromDate(Date.now)} ${items.length} Foto:${newItem.photo}`);
+  //  }
+    items = [newItem, ...items];
+    this.setState({ items: items });
+    Store.saveItems(items);
   }
 
   render() {
-
-    return (
+    const sections = this._getItemsWithSections(this.state.items);
+    return (      
       <View style={styles.container}>
-        <JournalItems items={this.state.items} />
+        <JournalItems items={sections} />
         <JournalItemInput onMeinSubmit={(text, photo) => this._addItem(text, photo)} />
       </View>
     );
