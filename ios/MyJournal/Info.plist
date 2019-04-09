@@ -55,6 +55,8 @@
 	<string>Für diese Funktion wird der Zugriff auf die gespeicherten Fotos benötigt</string>
 	<key>NSVideoSubscriberAccountUsageDescription</key>
 	<string>Für diese Funktion wird der Zugriff auf die Videos benötigt</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Wird für die Wetterinfos benötigt</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

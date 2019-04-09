@@ -14,6 +14,7 @@ import {
   TextInput,
   View,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 
 import JournalItems from '../components/JournalItems';
@@ -22,11 +23,27 @@ import Store from '../Store';
 
 
 export default class ViewTagebuch extends Component {
-  state = { items : [] };
+  state = { 
+    items : [],
+    myLocation: null,
+    myOrt: null,
+  };
 
   componentWillMount() {
     this._refreshItems();
+    this._findCoordinates();
   }
+
+  _findCoordinates = () => {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        this.setState({myLocation: position});
+        console.log(`Position gefunden ${JSON.stringify(position)}`);
+      },
+      error => Alert.alert(error.message),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+  };   
 
   _refreshItems = async () => {
     const items = await Store.loadItems();
@@ -59,18 +76,18 @@ export default class ViewTagebuch extends Component {
     return sections;
   }
 
-  _addItem(text, photo) {
+  _addItem(item) {
 
     let { items } = this.state;
-
-    const newItem = { text: text, photo: photo, date: Date.now() };
-
-  //  if (items.length > 0) {
-  //    console.log(`Neuer Eintrag: ${this._getSectionTitleFromDate(Date.now)} ${items.length} Foto:${newItem.photo}`);
-  //  }
-    items = [newItem, ...items];
-    this.setState({ items: items });
+    item.date = Date.now();
+    items = [item, ...items];
+    this.setState({ items: items, myOrt: item.location });
     Store.saveItems(items);
+  }
+
+  _setMyOrt(newOrt) {
+    this.setState({myOrt: newOrt});
+    console.log(`Neuer Ort eingetragen = ${newOrt}`);
   }
 
   render() {
@@ -78,7 +95,14 @@ export default class ViewTagebuch extends Component {
     return (      
       <View style={styles.container}>
         <JournalItems items={sections} />
-        <JournalItemInput onMeinSubmit={(text, photo) => this._addItem(text, photo)} />
+        <Text style={styles.standort}>
+          {`Aktueller Standort ist ${this.state.myOrt || 'unbekannt'}`}
+        </Text>
+        <JournalItemInput aktLocation={this.state.myLocation} 
+          onMeinSubmit={item => this._addItem(item)}
+          ortGefunden={newOrt => this._setMyOrt(newOrt)}
+          refresh={() => this.setState({ items: []})}  
+        />
       </View>
     );
   }
@@ -87,5 +111,11 @@ export default class ViewTagebuch extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
   },
+  standort: {
+    margin: 5,
+    paddingHorizontal: 5,
+    justifyContent: 'flex-end',
+  }
 });

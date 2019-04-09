@@ -13,6 +13,8 @@ import TouchableItem from './TouchableItem';
     render() {
 
       const { item } = this.props;
+      const { text, location, weather } = item;
+
       const date = new Date(item.date);
       const minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
       const time = `${date.getHours()}:${minutes}`;
@@ -27,8 +29,10 @@ import TouchableItem from './TouchableItem';
           <View style={styles.container}>
             {photo}
             <View style={styles.itemText}>
-              <Text numberOfLines={3} style={styles.listItem}>{item.text}</Text>
-              <Text style={styles.time}>{time}</Text>
+              <Text numberOfLines={3} style={styles.listItem}>{text}</Text>
+              <Text style={styles.time}>
+                {`${location || ''}  ${weather || ''}    ${time}`}
+              </Text>
             </View>
           </View>
         </TouchableItem>
@@ -61,6 +65,7 @@ import TouchableItem from './TouchableItem';
       flex: 1,
       flexDirection: 'row',
       paddingHorizontal: 5,
-      paddingVertical: 3
+      paddingVertical: 3,
+      minHeight: 50
     },
   });

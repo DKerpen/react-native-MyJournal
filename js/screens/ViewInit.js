@@ -4,19 +4,21 @@ import {
   Text,
   StyleSheet
 } from 'react-native'
-import AsyncStorage from '@react-native-community/async-storage';
+//import { useAsyncStorage } from '@react-native-community/async-storage';
 
 import { navHome, goHome } from '../screens/TabNav'
 
 import { USER_KEY } from '../Config'
 
-export default class ViewInit extends React.Component {
+//const { getItem } = useAsyncStorage(USER_KEY);
 
+export default class ViewInit extends React.Component {
+  
   async componentDidMount() {
     try {
       console.log('Ruf die TabLeiste auf')
-      const user = await AsyncStorage.getItem(USER_KEY)
-      console.log('user: ', user)
+//      const user = await getItem(USER_KEY)
+//      console.log('user: ', user)
       navHome()
     } catch (err) {
       console.log('error: ', err)

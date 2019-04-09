@@ -75,9 +75,6 @@ export default class ViewCamera extends Component {
                 flashMode={RNCamera.Constants.FlashMode.on}
                 permissionDialogTitle={'Permission to use camera'}
                 permissionDialogMessage={'We need your permission to use your camera phone'}
-                onGoogleVisionBarcodesDetected={({ barcodes }) => {
-                  console.log(barcodes);
-                }}
             />
               <View style={styles.photoIcon}>
                 <TouchableItem onPress={this.takePicture.bind(this)} style={styles.capture}>
