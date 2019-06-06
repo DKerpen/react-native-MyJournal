@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 import { Navigation } from 'react-native-navigation'
 import Icon from 'react-native-vector-icons/Ionicons';
 
+
 const tagebuchIcon = Platform.OS === 'ios'
   ? "ios-book"
   : "md-book";
@@ -26,37 +27,62 @@ export const goHome = () => Navigation.setRoot({
       }
 });
 
-export const navHome = () => Navigation.setRoot(
-  {
-    root: {
-      bottomTabs: {
-      id: 'BottomTabsId',
-      children: [
-        {
-          component: {
-            name: 'ViewTagebuch',
-            options: {
-              bottomTab: {
-                fontSize: 12,
-                text: 'Tagebuch',
-                icon: require('../../bilder/book.png')
+
+
+export const navHome = () => {
+
+    Navigation.setRoot(
+    {
+      root: {
+        bottomTabs: {
+        id: 'BottomTabsId',
+        children: [
+          {
+            component: {
+              name: 'ViewTagebuch',
+              passProps: {
+                text: 'Menu'
+              },
+              options: {
+                bottomTab: {
+                  fontSize: 12,
+                  text: 'Tagebuch',
+                  icon: require('../../bilder/book.png')
+                }
               }
-            }
+            },
           },
-        },
-        {
-          component: {
-            name: 'ViewFotos',
-            options: {
-              bottomTab: {
-                text: 'Fotos',
-                fontSize: 12,
-                icon: require('../../bilder/picture.png')
+          {
+            component: {
+              name: 'ViewFotos',
+              options: {
+                bottomTab: {
+                  text: 'Fotos',
+                  fontSize: 12,
+                  icon: require('../../bilder/picture.png')
+                }
               }
-            }
+            },
           },
-        },
-      ],
+          {
+            component: {
+              name: 'ViewSettings',
+              passProps: {
+                text: 'TEST'
+              },
+              options: {
+                bottomTab: {
+                  text: 'Einstellungen',
+                  fontSize: 12,
+                  icon: 
+                    require('../../bilder/picture.png')
+                }
+              } 
+            },
+          },
+        ],
+      }
     }
   }
-});
+  )
+}

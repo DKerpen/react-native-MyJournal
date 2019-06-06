@@ -1,17 +1,15 @@
-//import { useAsyncStorage } from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const ITEMS_KEY = 'MYJOURNAL_ITEMS';
 
-//const { getItem, setItem, removeItem } = useAsyncStorage(ITEMS_KEY);
-
-
 export default class Store {
+    
 
     static loadItems = async () => {
         let items = null;
         try {
-  //          const jsonItems = await getItem();
-  //          items = JSON.parse(jsonItems);
+            const jsonItems = await AsyncStorage.getItem(ITEMS_KEY);
+            items = JSON.parse(jsonItems);
         } catch (error) {
             console.error('Error loading journal items.', error.message);
         }
@@ -20,7 +18,7 @@ export default class Store {
 
     static saveItems = async items => {
         try {
-    //        await setItem(JSON.stringify(items));
+            await AsyncStorage.setItem(ITEMS_KEY,JSON.stringify(items));
         } catch (error) {
             console.error('Error saving journal items.', error.message);
         }
@@ -28,7 +26,7 @@ export default class Store {
 
     static deleteItems = async () => {
         try {
-      //      await removeItem();
+            await AsyncStorage.removeItem(ITEMS_KEY);
         } catch (error) {
             console.error('Error deleting journal items.', error.message);
         }

@@ -98,14 +98,16 @@ export default class JournalItemInput extends Component {
 
     
     const apiKey = 'APPID=2a3d1d4035b2805407854d3da85df554';
-    const url = 'http://api.openweathermap.org/data/2.5/weather?' +
+    const url = 'https://api.openweathermap.org/data/2.5/weather?' +
             locationCoords +
             '&' +
             apiKey +
             '&units=metric&lang=de';
-
+    console.log(`Die URL ist ${url}`);
     try {
+      console.log('Vor fetch');
       const response = await fetch(url);
+      console.log('Nach fetch');
       const weatherJSON = await response.json();
       const { weather, main, name } = weatherJSON;
 

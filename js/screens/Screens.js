@@ -6,6 +6,6 @@ export function registerScreens() {
   Navigation.registerComponent('ViewTagebuch', () => require('./ViewTagebuch').default);
   Navigation.registerComponent('ViewFotos', () => require('./ViewFotos').default);
   Navigation.registerComponent('ViewCamera', () => require('./ViewCamera').default);
-  Navigation.registerComponent('Screen2', () => require('./Screen2').default);
+  Navigation.registerComponent('ViewSettings', () => require('./ViewSettings').default);
   console.log(`End Register Screens`);
 }
