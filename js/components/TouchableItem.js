@@ -1,12 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 import {
   Platform,
   TouchableOpacity,
   TouchableNativeFeedback
-} from 'react-native';
+} from "react-native";
 
-const TouchableItem = Platform.OS === 'ios'
-  ? TouchableOpacity
-  : TouchableNativeFeedback;
+const TouchableItem =
+  Platform.OS === "ios" ? TouchableOpacity : TouchableNativeFeedback;
 
 export default TouchableItem;
